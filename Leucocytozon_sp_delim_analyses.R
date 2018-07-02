@@ -56,7 +56,7 @@ my_otu_table <- otu_table(x_t, taxa_are_rows = TRUE)
 my_phyloseq <- phyloseq(my_otu_table, reduced_bird_tree)
 
 # calculate weighted unifrac
-my_weighted_unifrac <- UniFrac(my_phyloseq, weighted=T, normalized=F)
+my_weighted_unifrac <- UniFrac(my_phyloseq, weighted=T)
 
 # do PCOA from weighted unifrac
 my_weighted_unifrac_pcoa <- pcoa(my_weighted_unifrac)
@@ -78,7 +78,7 @@ unifrac_rand <- function(my_matrix, lin_1, lin_2, rand_num) {
   my_true_distance <- my_true_weighted_unifrac_matrix[lin_1, lin_2]
   
   unifrac_distances <- numeric(rand_num)
-  rand_mat <- permatfull(my_matrix, fixedmar="both", shuffle='both', times=rand_num)
+  rand_mat <- permatfull(my_matrix, fixedmar="both", times=rand_num)
   
   for (i in 1:length(rand_mat$perm)) {
     my_rand_mat <- rand_mat$perm[[i]]
@@ -93,7 +93,7 @@ unifrac_rand <- function(my_matrix, lin_1, lin_2, rand_num) {
   hist(unifrac_distances, breaks=200)
   print(c("Weighted UniFrac Distance:", my_true_distance))
   print(c("Mean from Distribution:", mean(unifrac_distances)))
-  print(c("P-value:", length(unifrac_distances[unifrac_distances>my_true_distance])/1000))
+  print(c("P-value:", length(unifrac_distances[unifrac_distances>my_true_distance])/rand_num))
   return(unifrac_distances)
 }
 
